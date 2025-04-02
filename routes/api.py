@@ -11,9 +11,17 @@ def books_all(request: Request):
     return bc.show_all()
 
 @router.post('/books')
-async def books_save(book: BookSchema):
-    return await bc.save_record(book)
+def books_save(book: BookSchema):
+    return bc.save_record(book)
 
 @router.put('/books/{id}')
 def books_update(book: BookSchema):
     return  bc.update_record(id,book)
+
+@router.get('/books/{id}')
+def books_one(id):
+    return bc.show_one(id)
+
+@router.delete('/books/{id}')
+def books_delete(id):
+    return bc.destroy(id)
