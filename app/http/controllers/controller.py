@@ -28,12 +28,12 @@ class Controller:
 
     def index(self, table):
         instruction = f"SELECT * FROM {table}"
-        result = self.exec(instruction, fetch=True)
+        result =  self.exec(instruction, fetch=True)
         return result
 
     def show(self, table, id):
         instruction = f"SELECT * FROM {table} WHERE id = ?"
-        result = self.exec(instruction, params=(id,), fetch=True)
+        result =  self.exec(instruction, params=(id,), fetch=True)
         return result
 
     def store(self, table, data):
@@ -43,25 +43,25 @@ class Controller:
             values = tuple(data.values())
 
             instruction = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
-            result = self.exec(instruction, params=values, commit=True)
+            result =  self.exec(instruction, params=values, commit=True)
             return {"success": True, "message": "Record inserted successfully"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def update(self, table, values, id):
+    def update(self, table, data, id):
         try:
-            set_clause = ", ".join([f"{key} = ?" for key in values.keys()])
-            params = tuple(list(values.values()) + [id])
+            set_clause = ", ".join([f"{key} = ?" for key in data.keys()])
+            values = tuple(data.values()) + (id,)
 
             instruction = f"UPDATE {table} SET {set_clause} WHERE id = ?"
-            result = self.exec(instruction, params=params, commit=True)
+            self.exec(instruction, params=values, commit=True)
             return {"success": True, "message": "Record updated successfully"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
     def delete(self, table, id):
         instruction = f"DELETE FROM {table} WHERE id = ?"
-        result = self.exec(instruction, params=(id,), commit=True)
+        result =  self.exec(instruction, params=(id,), commit=True)
         return {"success": True, "message": "Record deleted successfully"}
 
     def exec(self, instruction, params=(), fetch=False, commit=False):
