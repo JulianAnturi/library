@@ -3,6 +3,7 @@ from pydantic import BaseModel, EmailStr
 class UserBase(BaseModel):
     username: EmailStr
     name: str
+    role: bool
 
 class UserCreate(UserBase):
     password: str
@@ -21,3 +22,8 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: str 
     role: bool 
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user: UserBase  # si solo quieres mostrar el nombre y username

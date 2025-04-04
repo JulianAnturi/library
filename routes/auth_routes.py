@@ -1,20 +1,15 @@
-
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
 from fastapi.security import OAuth2PasswordRequestForm
-from typing import Annotated
-
 from app.http.controllers.auth_controller import AuthController
+from app.http.schemas.user_schema import UserCreate, Token
 
-auth_router = APIRouter(
-        tags=["auth"]
-        )
-
+auth_router = APIRouter()
 auth_controller = AuthController()
 
-@auth_router.post("/login")
-def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    return auth_controller.login(form_data)
+@auth_router.post("/register")
+def register(user_data: UserCreate):
+    return auth_controller.register_user(user_data)
 
-@auth_router.get("/profile")
-def get_profile(my_user: Annotated[dict, Depends(auth_controller.decode_token)]):
-    return auth_controller.profile(my_user)
+@auth_router.post("/login", response_model=Token)
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    return auth_controller.login_user(form_data.username, form_data.password)

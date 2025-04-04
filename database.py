@@ -1,6 +1,13 @@
 import sqlite3 as sq
+from typing import Generator
 
 class Database:
+
+    @staticmethod
+    def get_connection( ):
+        conn = sq.connect("library.db")
+        conn.row_factory = sq.Row
+        return conn
 
     @staticmethod
     def createDB():
