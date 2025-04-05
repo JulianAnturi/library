@@ -21,3 +21,7 @@ if __name__ == '__main__':
     Database.createDB()
     Database.createTables()
 
+
+@app.get("/")
+def read_root():
+    return {"mensaje": "¡Hola desde tu biblioteca favorita!"}
