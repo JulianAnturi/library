@@ -66,6 +66,7 @@ class Controller:
 
     def exec(self, instruction, params=(), fetch=False, commit=False):
         conn = sq.connect("library.db")
+        conn.row_factory = sq.Row
         cursor = conn.cursor()
 
         try:
@@ -79,7 +80,8 @@ class Controller:
                 last_id = cursor.lastrowid
 
             if fetch:
-                result = cursor.fetchall()
+                rows = cursor.fetchall()
+                result = [dict(row) for row in rows]
                 return result
             elif commit:
                 return last_id
