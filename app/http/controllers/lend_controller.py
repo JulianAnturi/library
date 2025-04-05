@@ -11,16 +11,32 @@ class LendController:
         conn = Database.get_connection()
         cursor = conn.cursor()
 
+        # Verificar si el usuario ya tiene un préstamo activo
+        cursor.execute("""
+            SELECT * FROM lend 
+            WHERE user_id = ? 
+            AND date_deliver >= DATE('now') 
+        """, (lend_data.user_id,))
+        
+        existing_lend = cursor.fetchone()
+        if existing_lend:
+            conn.close()
+            raise HTTPException(
+                status_code=400, 
+                detail="Este usuario ya tiene un libro prestado. Devuélvalo antes de prestar otro."
+            )
+
         # Verificar que el libro existe
         cursor.execute("SELECT * FROM books WHERE id = ?", (lend_data.book_id,))
         book = cursor.fetchone()
 
         if not book:
+            conn.close()
             raise HTTPException(status_code=404, detail="Libro no encontrado")
 
         # Verificar disponibilidad
-        # return book["state"]
-        if book["state"] == 0 or book["quantity"] <= 0:
+        if book["state"] != 1 or book["quantity"] <= 0:
+            conn.close()
             raise HTTPException(status_code=400, detail="Libro no disponible para préstamo")
 
         # Insertar préstamo
@@ -52,4 +68,3 @@ class LendController:
             "date_lend": lend_data.date_lend,
             "date_deliver": lend_data.date_deliver
         }
-
