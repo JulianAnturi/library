@@ -36,4 +36,3 @@ class UserSchema(BaseModel):
     role: bool = Field(..., max_length=255)
     email: str = Field(..., ge=0)  # ge = greater or equal
     password: float = Field(..., ge=0)
-    sypnosis: str = Field(..., min_length=1)
