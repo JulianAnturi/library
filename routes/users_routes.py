@@ -19,15 +19,15 @@ def users_all(request: Request):
 def users_save(user: UserSchema):
     return bc.save_record(user)
 
-@users_router.put('/users/{id}')
-def users_update(user: UserSchema):
-    return  bc.update_record(id,user)
+# @users_router.put('/users/{record_id}')
+# def users_update(user: UserSchema):
+#     return  bc.update_record(record_id,user)
 
-@users_router.get('/users/{id}')
-def users_one(id):
-    return bc.show_one(id)
+@users_router.get('/users/{record_id}')
+def users_one(record_id: int):
+    return bc.show_one(record_id)
 
-@users_router.delete('/users/{id}')
-def users_delete(id):
-    return bc.destroy(id)
+@users_router.delete('/users/{record_id}')
+def users_delete(record_id: int):
+    return bc.destroy(record_id)
 

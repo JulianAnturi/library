@@ -32,18 +32,19 @@ class BookController(Controller):
         except Exception:
             raise Exception("ups, something went wrong")
 
-    def update_record(self, id, book: BookSchema):
+    def update_record(self, record_id , book: BookSchema):
         try:
             data = book.model_dump()
-            result =   self.update(self.table,data, id)
+            print("id = ",record_id) 
+            result =   self.update(self.table,data, record_id)
             return result
 
         except Exception:
             raise Exception("ups, something went wrong")
 
-    def destroy(self, id):
+    def destroy(self, record_id):
         try:
-            result = self.delete(self.table, id)
+            result = self.delete(self.table, record_id)
             return result
         except Exception:
             raise Exception("ups, something went wrong")

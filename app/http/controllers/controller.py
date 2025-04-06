@@ -41,6 +41,7 @@ class Controller:
             columns = ", ".join(data.keys())
             placeholders = ", ".join(["?" for _ in data.values()])
             values = tuple(data.values())
+            
 
             instruction = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
             result =  self.exec(instruction, params=values, commit=True)
@@ -48,13 +49,16 @@ class Controller:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def update(self, table, data, id):
+    def update(self, table, data, record_id):
         try:
             set_clause = ", ".join([f"{key} = ?" for key in data.keys()])
-            values = tuple(data.values()) + (id,)
+            values = tuple(data.values()) + (record_id,)
+
+            print("Valores a actualizar:", values)
 
             instruction = f"UPDATE {table} SET {set_clause} WHERE id = ?"
             self.exec(instruction, params=values, commit=True)
+
             return {"success": True, "message": "Record updated successfully"}
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -70,6 +74,8 @@ class Controller:
         cursor = conn.cursor()
 
         try:
+            print("Ejecutando SQL:", instruction)
+            print("Con parámetros:", params)
             if params:
                 cursor.execute(instruction, params)
             else:

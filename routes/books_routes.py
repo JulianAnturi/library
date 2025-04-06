@@ -19,15 +19,15 @@ def books_all(request: Request):
 def books_save(book: BookSchema):
     return bc.save_record(book)
 
-@books_router.put('/books/{id}')
-def books_update(book: BookSchema):
-    return  bc.update_record(id,book)
+@books_router.put('/books/{record_id}')
+def books_update(record_id: int, book: BookSchema):  # ← aquí faltaba
+    return bc.update_record(record_id, book)
 
-@books_router.get('/books/{id}')
-def books_one(id):
-    return bc.show_one(id)
+@books_router.get('/books/{record_id}')
+def books_one(record_id: int):
+    return bc.show_one(record_id)
 
-@books_router.delete('/books/{id}')
-def books_delete(id):
-    return bc.destroy(id)
+@books_router.delete('/books/{record_id}')
+def books_delete(record_id:int):
+    return bc.destroy(record_id)
 
