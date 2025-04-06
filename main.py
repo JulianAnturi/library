@@ -1,6 +1,7 @@
 from database import Database
 import uvicorn
 import os
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from routes.books_routes import books_router
 from routes.users_routes import users_router
@@ -21,6 +22,16 @@ app.include_router(users_router)
 app.include_router(lend_router)
 
 app.include_router(lend_history_router)
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # o ["*"] para todos
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 if __name__ == '__main__':
     Database.createDB()
     Database.createTables()
